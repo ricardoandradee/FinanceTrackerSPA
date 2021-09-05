@@ -1,0 +1,17 @@
+.expense-add-section {
+    max-width: 100%;
+}
+
+.payment-radio-group {
+    display: flex;
+    flex-direction: row;
+    margin: 15px 0;
+  }
+
+  .mat-radio-button {
+    min-width: 80px;
+  }
+
+  .mat-form-field {
+    width: 250px;
+  }

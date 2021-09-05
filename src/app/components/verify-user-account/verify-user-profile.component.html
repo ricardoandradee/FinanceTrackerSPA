@@ -1,0 +1,10 @@
+<div class="verify-user" fxLayout="column" fxLayout.gt-md="row" fxLayoutGap.gt-md="40px" fxLayoutAlign="center center">
+    <section *ngIf="processed">
+        <h1>
+            <mat-icon class="mat-icon-big" [ngStyle]="{'color': successfull ? 'green' : 'red' }">
+                {{ successfull ? 'done_outline' : 'error_outline' }}
+            </mat-icon>
+        </h1>
+        <p>{{message_response}}</p>
+    </section>
+</div>  

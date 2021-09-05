@@ -1,0 +1,45 @@
+<form fxLayout="column" fxLayoutAlign="center center" #accountActionsForm="ngForm" fxLayoutGap="12px" novalidate>
+    <h2 mat-dialog-title>
+        Transactions
+    </h2>
+    <section class="account-transactions-section">
+        <div mat-dialog-content>
+            <mat-table [dataSource]="dataSource" matSortActive="createdDate" matSortDirection="desc" matSort>
+                <ng-container matColumnDef="CreatedDate">
+                    <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon class="mat-icon-action" [ngStyle]="{'color': element.action == 'Deposit' ? 'green' : 'red' }"
+                            [matTooltip]="element.action">
+                            {{ element.action == 'Deposit' ? 'arrow_upward' : 'arrow_downward' }}
+                        </mat-icon>
+                        {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }}
+                    </mat-cell>
+                </ng-container>
+      
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.description }} </mat-cell>
+                </ng-container>
+      
+                <ng-container matColumnDef="Amount">
+                    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                    <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.action == 'Withdraw' ? 'red' : 'green' }">
+                        {{ element.action == 'Withdraw' ? '-' : '' }} {{ element.amount | currency: account.currency.code }}
+                    </mat-cell>
+                </ng-container>
+      
+                <ng-container matColumnDef="Balance">
+                    <mat-header-cell *matHeaderCellDef> Balance </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.balanceAfterTransaction | currency: account.currency.code }} </mat-cell>
+                </ng-container>
+                
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; let even = even; columns: displayedColumns;"
+                [ngClass]="{gray: even}"></mat-row>
+          </mat-table>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Close</button>
+        </mat-dialog-actions>
+    </section>
+</form>

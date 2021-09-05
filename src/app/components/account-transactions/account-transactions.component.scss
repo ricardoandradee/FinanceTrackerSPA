@@ -1,0 +1,31 @@
+.mat-dialog-content {
+    width: 600px;
+    height: 500px;
+    // border: 1px solid #AAA;
+    overflow: hidden;
+}
+
+.mat-table {
+    height: 100%;
+    margin-right: -50px; /* Maximum width of scrollbar */
+    padding-right: 50px; /* Maximum width of scrollbar */
+    overflow-y: scroll;
+}
+
+.mat-icon-action {
+    transform: scale(0.8);
+ }
+
+.gray {
+    background-color: lightyellow;
+}
+
+.mat-footer-row, .mat-header-row, .mat-row {
+    border-style: dashed;
+}
+
+@media (max-width: 499px) {
+    .mat-dialog-content {
+        padding: 0px 10px;
+    }
+}

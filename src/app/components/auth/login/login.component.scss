@@ -1,0 +1,49 @@
+  .login-section {
+      max-width: 95%;
+      margin: 20px;
+  }
+
+  .mat-card {
+    margin-bottom: 20px;
+  }
+
+  .create-account-span {
+    padding-right: 5px;
+  }
+
+  :host {
+    display: flex;
+    justify-content: center;
+    margin: 100px 0px;
+  }
+
+  .mat-form-field {
+    max-width: 95%;
+    min-width: 220px;
+  }
+
+  mat-card-title,
+  mat-card-content {
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 599px) {
+    .mat-form-field {
+        width: 95%;
+    }
+    .mat-card {
+      max-width: 90%;
+      overflow: hidden;
+    }
+    mat-card-title,
+    mat-card-content {
+        max-width: 100%;
+    }
+  }

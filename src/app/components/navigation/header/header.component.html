@@ -1,0 +1,44 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button *ngIf="(isAuth$ | async)">
+      <mat-icon (click)="onToggleSidenav()">
+        {{ openSideNav ? 'close' : 'menu' }}
+      </mat-icon>
+    </button>
+    <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/expensehistory'] : ['/']">Spend wise</a></h1>
+    <div fxLayoutGap="10px" fxFlex fxLayout fxLayoutAlign="end">
+      <mat-form-field *ngIf="(isAuth$ | async)" class="currency">
+        <mat-label> Total balance in</mat-label><mat-label style="font-weight: bold;"> {{ userBaseCurrency.code }} </mat-label>
+        <input type="text" matInput name="userBaseCurrency" id="userBaseCurrency" readonly
+              [value]="allAccounts | bankAccountsBalance: userBaseCurrency.code | currency: userBaseCurrency.code">
+      </mat-form-field>
+      <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
+        <li>
+          <button mat-stroked-button [routerLink]="'/login'">
+            <mat-icon>login</mat-icon>
+            Login
+          </button>
+        </li>
+        <li>
+          <button mat-button [routerLink]="'/signup'">
+            <mat-icon>how_to_reg</mat-icon>
+            Sign up
+          </button>
+        </li>
+      </ul>
+      <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
+        <li>
+          <span class="users-profile">
+            <button mat-mini-fab [matTooltip]="profileTooltipLabel" (click)="openUserSettingsDialog()"
+                    [matTooltipPosition]="position.value" color="warn" matTooltipClass="tooltip">
+              <mat-icon>face_outline</mat-icon>
+            </button>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="(isAuth$ | async)" class="second-toolbar">
+    <span>{{ pageTitle }}</span>
+  </mat-toolbar-row>
+</mat-toolbar>

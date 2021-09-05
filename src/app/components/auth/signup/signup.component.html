@@ -1,0 +1,59 @@
+<section class="signup-section">
+  <mat-card>
+    <mat-card-title>Create your account</mat-card-title>
+    <mat-card-content>
+        <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" fxLayoutGap="10px" (ngSubmit)="onSubmit(f)">
+            <mat-form-field>
+                <input type="text" matInput placeholder="Full Name" #fullNameInput="ngModel"
+                    name="fullName" id="fullName" ngModel minlength="6" maxlength="255">
+                    <mat-hint align="end">{{ fullNameInput.value?.length }} / 6 </mat-hint>
+            </mat-form-field>
+            <mat-form-field hintLabel="Password should be at least 6 characters long.">
+                <input type="password" matInput placeholder="Password" #pwInput="ngModel"
+                    name="password" id="password" ngModel required minlength="6">
+                    <mat-error>Password should be 6 characters long.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+            <input type="text" matInput placeholder="Email" maxlength="100"
+                #emailInput="ngModel" name="email" id="email" [errorStateMatcher]="emailMatcher"
+                ngModel required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" />
+            <mat-error *ngIf="emailInput.hasError('alreadyTaken')">
+                This E-mail is already registered in our system.
+            </mat-error>
+            <mat-error *ngIf="emailInput.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="emailInput.hasError('pattern')">
+                Please enter a valid email address
+            </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label> Currency </mat-label>
+                <mat-select #currencyInput="ngModel" name="currency" id="currency" ngModel required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let currency of currencies" [value]="currency.id">
+                        {{currency.code}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Currency is required.</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label> Time Zone </mat-label>
+                    <mat-select #timeZoneInput="ngModel" name="timeZone" id="timeZone" ngModel required>
+                        <mat-option value=""> - Select - </mat-option>
+                        <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone.id">
+                            {{timeZone.description}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Time Zone is required.</mat-error>
+                </mat-form-field>
+            <button type="submit" [disabled]="f.invalid" mat-raised-button color="warn">Submit</button>
+        </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <span class="already-on-span"> Already on SpendWise? </span> <a [routerLink]="'/login'">Login.</a>
+    </mat-card-content>
+  </mat-card>
+</section>

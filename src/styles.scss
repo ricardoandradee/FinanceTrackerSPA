@@ -1,0 +1,23 @@
+html,
+body {
+  font-family: "Roboto", sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+}
+
+.warn-label {
+  color: red;
+  font-size: small;
+  display: block;
+  max-width: 450px;
+  word-wrap: break-word;
+  margin-top: 10px;
+}
+
+.mat-dialog-content {
+  overflow: hidden !important;
+}

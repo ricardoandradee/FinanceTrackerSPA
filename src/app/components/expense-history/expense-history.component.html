@@ -1,0 +1,80 @@
+<div fxLayoutAlign="left" class="header-div" fxLayoutGap="20px">
+    <mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
+    <mat-form-field fxFlex="30%" *ngIf="categoriesKeyValue.length > 0 && !(isLoading$ | async)">
+        <mat-label> Categories </mat-label>
+        <mat-select name="categories" id="categories" [(ngModel)]="category" (selectionChange)="applyFilterByCategory()">
+            <mat-option value="All">All</mat-option>
+            <mat-option *ngFor="let c of categoriesKeyValue" [value]="c.key">
+                {{c.value}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" *ngIf="datesKeyValue.length > 0 && !(isLoading$ | async)">
+        <mat-label> Dates </mat-label>
+        <mat-select name="dates" id="dates" [(ngModel)]="expenseDate" (selectionChange)="applyFilterByDate()">
+            <mat-option value="All">All</mat-option>
+            <mat-option *ngFor="let p of datesKeyValue" [value]="p.key">
+                {{p.value}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<a mat-fab class="add-button" color="accent" *ngIf="!(isLoading$ | async)" [disabled]="allCategories.length === 0"
+    [matTooltip]="allCategories.length === 0 ? 'Please, add categories first.' : 'Add Expense'"
+    (click)="allCategories.length > 0 && onOpenAddExpenseDialog()"><mat-icon>add</mat-icon></a>
+
+<div class="mat-elevation-z8 small-screen-margin-bottom" [ngClass]="{'mat-table-no-items': dataSource.data.length === 0 }">
+    <table *ngIf="!(isLoading$ | async)" mat-table [dataSource]="dataSource" matSortActive="createdDate" matSortDirection="desc" matSort>
+        <ng-container matColumnDef="CreatedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+            <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Created At'> {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }} </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+            <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Category'>
+                <span>{{ element.category.name }}</span>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Establishment">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Establishment </th>        
+            <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Establishment'>
+                <span>{{ element.establishment }}</span>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>       
+            <td mat-cell *matCellDef="let element" fxLayoutGap="15px" class='show-text-before' data-label='Price'>
+                <span>{{ element.price | currency: element.currency.code }}</span>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container  matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Status'>
+                <span>
+                    {{ element.isPaid ? 'Paid' : 'Unpaid' }}
+                </span>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> <span style="font-weight: bold; margin-right: 15px;">Total</span> {{ dataSource.filteredData | expenseTotalPrice:userBaseCurrency | currency: userBaseCurrency }} </td>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+            <th mat-header-cell  *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="onDelete(element)" style="color:red;" matTooltip="Delete">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button mat-icon-button (click)="onEdit(element)" style="color:blue;" matTooltip="Edit">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"> </tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
+</div>

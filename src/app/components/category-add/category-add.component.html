@@ -1,0 +1,17 @@
+<form #addCategoryForm="ngForm" (ngSubmit)="onSave(addCategoryForm)">
+    <h2 mat-dialog-title>Add Categories</h2>
+    <section class="category-add-section">
+        <div mat-dialog-content>
+            <mat-form-field hintLabel="Name should be at least 6 characters long.">
+                <input type="text" matInput placeholder="Name" #nameInput="ngModel" name="name" id="name"
+                    ngModel required minlength="6" maxlength="50">
+                <mat-hint align="end">{{ nameInput.value?.length }} / 6 </mat-hint>
+                <mat-error>Name should contain at least 6 characters long.</mat-error>
+            </mat-form-field>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addCategoryForm.invalid" mat-raised-button color="primary">Save</button>
+        </mat-dialog-actions>
+    </section>
+</form>

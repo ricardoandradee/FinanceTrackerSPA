@@ -1,0 +1,49 @@
+<form #userSettingsForm="ngForm" (ngSubmit)="onSave()">
+    <h2 mat-dialog-title>User Settings</h2>
+    <section class="bank-account-add-section">
+        <div mat-dialog-content>
+            <mat-form-field>
+                <mat-label> Full Name </mat-label>
+                <input type="text" matInput name="fullName" id="fullName"
+                    [disabled]="true" [value]="userSettings.fullName">
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <mat-label> E-mail </mat-label>
+                <input type="text" matInput name="email" id="email"
+                    [disabled]="true" [value]="userSettings.email">
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <mat-label> Base Currency </mat-label>
+                <mat-select #currencyInput="ngModel" name="currency" id="currency" 
+                    [(ngModel)]="userSettings.currency.id" required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let currency of currencies" [value]="currency.id">
+                        {{currency.code}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Currency is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <mat-label> Time Zone </mat-label>
+                <mat-select #timeZoneInput="ngModel" name="timeZone" id="timeZone"
+                    [(ngModel)]="userSettings.stateTimeZone.id" required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone.id">
+                        {{timeZone.description}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Time Zone is required.</mat-error>
+            </mat-form-field>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="userSettingsForm.invalid" mat-raised-button color="primary">Save</button>
+        </mat-dialog-actions>
+    </section>
+</form>

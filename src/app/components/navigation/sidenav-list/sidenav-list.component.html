@@ -1,0 +1,43 @@
+<mat-nav-list>
+    <a *ngIf="!(isAuth$ | async)" fxHide.gt-xs mat-list-item
+        [class.active]="isActive('login')" routerLink="/login">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">login</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Login</span>
+        </div>
+    </a>
+    <a *ngIf="!(isAuth$ | async)" fxHide.gt-xs mat-list-item
+        [class.active]="isActive('signup')" routerLink="/signup">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">how_to_reg</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Signup</span>
+        </div>
+    </a>
+    <a *ngIf="isAuth$ | async" mat-list-item
+        [class.active]="isActive('finance/categorylist')" [routerLink]="'/finance/categorylist'">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">wysiwyg</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Categories</span>
+        </div>
+    </a>
+    <a *ngIf="isAuth$ | async"  mat-list-item
+        [class.active]="isActive('finance/income')" [routerLink]="'/finance/income'">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">account_balance</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Income</span>
+        </div>
+    </a>
+    <a *ngIf="isAuth$ | async" mat-list-item
+        [class.active]="isActive('finance/expensehistory')" [routerLink]="'/finance/expensehistory'">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">payments</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Expenses</span>
+        </div>
+    </a>
+    <a *ngIf="isAuth$ | async" mat-list-item (click)="onSignOut()">
+        <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">power_settings_new</mat-icon>
+        <div *ngIf="sidenavWidth > 4" class="sidenav-item">
+            <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Sign out</span>
+        </div>
+    </a>
+</mat-nav-list>

@@ -1,0 +1,25 @@
+a.toolbar-link {
+    text-decoration: none;
+    color: white;
+}
+
+a.toolbar-link:hover,
+a.toolbar-link:active {
+    color: lightgray;
+}
+
+.mat-nav-list {
+    position: relative;
+    display: block;
+    transform: inherit;
+}
+
+.mat-icon {
+    margin-top: 10px;
+}
+
+
+.active {
+    position:relative;
+    background-color: #E8E8E8;
+}

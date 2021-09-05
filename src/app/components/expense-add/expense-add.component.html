@@ -1,0 +1,73 @@
+    <form #addExpenseForm="ngForm" (ngSubmit)="onSave()">
+        <h2 mat-dialog-title>{{ isEditMode ? 'Edit Expense' : 'Add Expense'}}</h2>
+        <section class="expense-add-section">
+            <div mat-dialog-content>
+                <mat-form-field>
+                    <input type="text" matInput placeholder="Establishment" #nameInput="ngModel" [(ngModel)]="expense.establishment"
+                    maxlength="50" name="establishment" id="establishment">
+                </mat-form-field>
+            </div>
+            <div mat-dialog-content fxLayoutGap="20px">
+                <mat-form-field [style.width.px]=100>
+                    <mat-label> Currency </mat-label>
+                    <mat-select #currencyInput="ngModel" name="currency" id="currency"
+                    [(ngModel)]="expense.currency.id" [disabled]="isEditMode" required>
+                        <mat-option value=""> - Select - </mat-option>
+                        <mat-option *ngFor="let currency of currencies" [value]="currency.id">
+                            {{currency.code}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Currency is required.</mat-error>
+                </mat-form-field>
+                <mat-form-field [style.width.px]=130>
+                    <input type="number" matInput (blur)="onPaymentChange()"
+                    placeholder="Price" #priceInput="ngModel" [disabled]="isEditMode && isInitiallyPaid"
+                    [(ngModel)]="expense.price" name="price" id="price" ngModel required>
+                    <mat-error>Price is required.</mat-error>
+                </mat-form-field>
+            </div>
+            <div mat-dialog-content>
+                <mat-form-field>
+                    <mat-label> Categories </mat-label>
+                    <mat-select #categoryInput="ngModel" name="category" id="category" [(ngModel)]="expense.category.id" required>
+                        <mat-option value=""> - Select - </mat-option>
+                        <mat-option *ngFor="let ctg of categories" [value]="ctg.id">
+                            {{ctg.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Category is required.</mat-error>
+                </mat-form-field>
+            </div>
+            <div mat-dialog-content *ngIf="!isEditMode">
+                <mat-radio-group name="payment" id="payment"
+                    class="payment-radio-group" [(ngModel)]="expense.isPaid">
+                    <mat-radio-button class="actions-radio-button" *ngFor="let status of paymentStatuses"
+                    (change)="onPaymentStatusChange($event)" [value]="status">
+                        {{status ? 'Paid' : 'Unpaid'}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div mat-dialog-content *ngIf="isEditMode">
+                <span> Payment details </span>
+            </div>
+            <div mat-dialog-content *ngIf="expense.isPaid || isEditMode">
+                <mat-form-field>
+                    <mat-label> Bank accounts </mat-label>
+                    <mat-select #bankAccountInput="ngModel" name="bankAccount"
+                    (selectionChange)="onPaymentChange()" id="bankAccount" [disabled]="isEditMode && isInitiallyPaid"
+                    [(ngModel)]="expense.accountId" [required]="!isEditMode">
+                        <mat-option value=""> -- Select -- </mat-option>
+                        <mat-option *ngFor="let p of accountDropdownList" [value]="p.accountId">
+                            {{p.description}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Bank account is required.</mat-error>
+                </mat-form-field>
+                <span class="warn-label">{{currencyConverted}}</span>
+            </div> 
+            <mat-dialog-actions align="end">
+                <button mat-button mat-dialog-close>Cancel</button>
+                <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addExpenseForm.invalid" mat-raised-button color="primary">Save</button>
+            </mat-dialog-actions>
+        </section>
+    </form>

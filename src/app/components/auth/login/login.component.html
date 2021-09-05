@@ -1,0 +1,32 @@
+<section class="login-section">
+  <mat-card>
+    <mat-card-title>Login to SpendWise</mat-card-title>
+    <mat-card-content>
+      <form fxLayout="column" fxLayoutAlign="center center" [formGroup]="loginForm" (ngSubmit)="onLogin()" fxLayoutGap="12px" novalidate>
+        <p>
+          <mat-form-field>
+            <input type="text" matInput formControlName="email" placeholder="Email" maxlength="100"
+              required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+            <mat-error *ngIf="!loginForm.controls['email'].errors?.required">Please enter a valid email address</mat-error>
+            <mat-error *ngIf="loginForm.controls['email'].errors?.required">Email is required</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <input type="password" formControlName="password" matInput placeholder="Password">
+            <mat-hint>At least 6 characters needed</mat-hint>
+            <mat-error *ngIf="loginForm.controls['password'].errors">At least 6 characters needed</mat-error>
+          </mat-form-field>
+        </p>
+        <div class="button">
+          <button type="submit" [disabled]="!loginForm.valid" mat-raised-button color="primary">Login</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <span class="create-account-span"> Don't you have an account yet? </span> <a [routerLink]="'/signup'">Create an account.</a>
+    </mat-card-content>
+  </mat-card>
+</section>

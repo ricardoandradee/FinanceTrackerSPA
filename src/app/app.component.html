@@ -1,0 +1,7 @@
+<app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav  mode="side" [opened]="openSideNav" [ngStyle]="{ 'width.em': sidenavWidth }" (mouseenter)="increase()" (mouseleave)="decrease()">
+      <app-sidenav-list (sidenavClose)="sidenav.toggle()" (sidenavLogout)="onLogout()"></app-sidenav-list>
+    </mat-sidenav>
+    <router-outlet></router-outlet>  
+  </mat-sidenav-container>

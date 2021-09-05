@@ -1,0 +1,36 @@
+<form fxLayout="column" fxLayoutAlign="center center" #accountActionsForm="ngForm" fxLayoutGap="12px" novalidate>
+    <h2 mat-dialog-title>
+        Deposit/Withdraw actions
+    </h2>
+    <section class="account-actions-section">
+        <div mat-dialog-content>
+            <mat-radio-group name="action" id="action"
+                class="actions-radio-group" [(ngModel)]="transaction.action">
+                <mat-radio-button class="actions-radio-button" *ngFor="let act of accountActions"
+                    [value]="act">
+                    {{act}}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>    
+        <div mat-dialog-content>
+            <mat-form-field>
+                <input type="number" pattern="^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$" matInput placeholder="Amount" [(ngModel)]="transaction.amount"
+                 name="amount" id="amount" ngModel required>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <input type="text" matInput
+                placeholder="Description" name="description" id="description" [(ngModel)]="transaction.description">
+            </mat-form-field>
+        </div>
+            <div *ngIf="!accountActionsForm.invalid">
+                <mat-label class="break-line-200 warn-label">You are going to {{ transaction.action | lowercase }} {{ transaction.amount | currency: transaction.account.currency.code }} {{ transaction.action === 'Deposit' ? ' into ' : ' from '  }} your bank account.</mat-label>
+            </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" (click)="onSave()"
+             [disabled]="accountActionsForm.invalid" mat-raised-button color="primary">Save</button>
+        </mat-dialog-actions>
+    </section>
+</form>

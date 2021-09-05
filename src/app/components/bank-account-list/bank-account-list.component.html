@@ -1,0 +1,129 @@
+<div fxLayoutAlign="center center" class="header-div">
+    <mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
+    <mat-form-field fxFlex="35%" *ngIf="!(isLoading$ | async)">
+        <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter" name="txtFilter" id="txtFilter">
+    </mat-form-field>
+</div>
+<a mat-fab class="add-button" *ngIf="!(isLoading$ | async)" color="accent" (click)="openDialog()"><mat-icon>add</mat-icon></a>
+<div class="mat-elevation-z8 small-screen-margin-bottom">
+    <table *ngIf="!(isLoading$ | async)" mat-table [dataSource]="dataSource" matSortActive="createdDate" matSortDirection="desc" matSort>
+    <ng-container matColumnDef="CreatedDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+        <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Created At'>
+            <button mat-icon-button class="mat-extender" color="primary">
+                <mat-icon id="expand_more" (click)="expand(element)" #expand_more *ngIf="!element.close">chevron_right</mat-icon>
+                <mat-icon id="expand_less" (click)="expand(element)" #expand_less *ngIf="element.close">expand_more</mat-icon>
+            </button>
+            {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+    <ng-container  matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Name'>
+            <span *ngIf="!editBankInfo?.id || element.id!==editBankInfo.id">{{ element.name }}</span>
+            <mat-form-field *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" appearance="outline">
+                <input type="text" matInput placeholder="Name" name="name" id="name" [(ngModel)]="element.name">
+            </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+    <ng-container  matColumnDef="Branch">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Branch </th>
+        <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Branch'>
+            <span *ngIf="!editBankInfo?.id || element.id!==editBankInfo.id">{{ element.branch }}</span>
+            <mat-form-field *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" appearance="outline">
+                <input type="text" matInput placeholder="Branch" name="branch" id="branch" [(ngModel)]="element.branch">
+            </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+    <ng-container  matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Status'>
+            <mat-slide-toggle  *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" (click)="onIsActiveChange(element)" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-slide-toggle>
+            <span *ngIf="!editBankInfo?.id || element.id!==editBankInfo.id">
+                {{ element.isActive ? 'Active' : 'Inactive' }}
+            </span>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+    <ng-container matColumnDef="Balance">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
+        <td mat-cell *matCellDef="let element"  class='show-text-before' data-label='Balance'> {{ element.accounts | bankAccountsBalance:userBaseCurrency | currency: userBaseCurrency }} </td>
+        <td mat-footer-cell *matFooterCellDef> <span style="font-weight: bold; margin-right: 15px;">Total</span> {{ dataSource.filteredData | accountsTotalPrice:userBaseCurrency | currency: userBaseCurrency }} </td>
+    </ng-container>
+    <ng-container matColumnDef="Actions">
+        <th mat-header-cell  *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="onAddAccout(element)" style="color:blue;" *ngIf="!rowInEditMode && element.isActive" matTooltip="Add account">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDelete(element)" style="color:red;" *ngIf="!rowInEditMode || element.id!==editBankInfo?.id" matTooltip="Delete all bank accounts">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onEdit(element)" style="color:blue;" *ngIf="!rowInEditMode || element.id!==editBankInfo?.id"  matTooltip="Edit bank details">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onUpdate()" style="color:green;" *ngIf="rowInEditMode && element.id===editBankInfo?.id" matTooltip="Save bank details">
+                <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onCancelEdit()" style="color:red;" *ngIf="rowInEditMode && element.id===editBankInfo?.id" matTooltip="Cancel edit">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"> </tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"
+    [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl" (toggleChange)="onToggleChange($event, row)"></tr>
+</table>
+<mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
+</div>
+
+
+<ng-template #tpl let-element>
+    <div fxLayout="column" [@detailExpand] style="overflow: hidden" class="mat-row extender-details" fxLayout.gt-md="row" fxLayoutGap.gt-md="20px" fxLayoutAlign="left center">
+        <mat-card *ngFor="let account of element.accounts" class="card-detailed">
+            <mat-card-header>
+                <mat-card-title>Account name: {{ account.name }}</mat-card-title>
+                <mat-card-subtitle>Account number: {{ account.number }}</mat-card-subtitle>
+                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="more">
+                        <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="onAccountAction(account)">
+                      <mat-icon>compare_arrows</mat-icon>
+                      <span>Deposit/Withdraw</span>
+                    </button>
+                    <button mat-menu-item (click)="onShowTransactions(account)">
+                      <mat-icon>receipt_long</mat-icon>
+                      <span>Show transactions</span>
+                    </button>
+                  </mat-menu>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <span style="font-weight: bold;">Account status: </span>
+                    <span *ngIf="account.isActive">Active</span>
+                    <span *ngIf="!account.isActive">Inactive</span>
+                </div>
+                <div>
+                    <span style="font-weight: bold;">Current balance: </span>
+                    <span>{{ account.currentBalance | currency: account.currency.code }}</span>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button (click)="onEditAccount(account, element.isActive)">
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                </button>
+                <button mat-button *ngIf="element.accounts.length > 1" (click)="onDeleteAccount(account)">
+                    <mat-icon>delete</mat-icon>
+                    Delete
+                </button>
+            </mat-card-actions>
+        </mat-card>
+	</div>
+</ng-template>
